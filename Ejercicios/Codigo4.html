@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programa de Formulario Libro</title>
+    <script>
+        function calcular(form) {
+            form.porDos.value = form.nEntrada.value * 2;
+            form.cuadrado.value = form.nEntrada.value * form.nEntrada.value;
+        }
+    </script>
+</head>
+<body>
+    <h1>Programa de Formulario Libro</h1>
+
+    <form method="post">
+        <label for="nEntrada">Valor:</label>
+        <input type="text" name="nEntrada" value="0" onchange="calcular(this.form);" />
+        <br><br>
+
+        <label for="porDos">Doble:</label>
+        <input type="text" name="porDos" value="0" readonly />
+        <br><br>
+
+        <label for="cuadrado">Cuadrado:</label>
+        <input type="text" name="cuadrado" value="0" readonly />
+    </form>
+</body>
+</html>

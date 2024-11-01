@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Archivo de texto</title>
+</head>
+<body>
+    <h2>Selecciona un archivo de texto (.txt)</h2>
+    <input type="file" id="fileInput" accept=".txt">
+    <pre id="fileContent"></pre>
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            var file = event.target.files[0]; // Acceder al archivo
+            if (file && file.type === "text/plain") {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('fileContent').textContent = e.target.result; // Mostrar el contenido
+                };
+                reader.readAsText(file); // Leer el archivo como texto
+            } else
+                document.getElementById('fileContent').textContent = "Por favor selecciona un archivo de texto (.txt).";
+        });
+    </script>
+</body>
+</html>

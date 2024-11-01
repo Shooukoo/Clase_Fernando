@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Saludo y Calculadora Simple</title>
+    <script>
+        alert("Hola Bienvenido. . . ");
+        document.write("Bienvenido, ¿cómo estás?<br><br>");
+        document.writeln("&nbsp; &nbsp; mensaje con salto de línea . . . ");
+        document.write("<pre>Saltando una línea . . . </pre>");
+        var nom = prompt('Introduce tu nombre:', "Nombre. . aparece");
+        document.write("<h1>Hola, ¿cómo estás?</h1><h2>" + nom + ", buenos días<br></h2>");
+        var sum = prompt("¿Cuánto es 5 + 5?", "Respuesta");
+        var correcta = "Tu respuesta es correcta.";
+        var incorrecta = "Tu respuesta es incorrecta.";
+        var res = (parseInt(sum) === 10) ? correcta : incorrecta; // Aseguramos que la comparación sea correcta
+        document.write("La respuesta fue: " + res);
+    </script>
+</head>
+<body>
+</body>
+</html>

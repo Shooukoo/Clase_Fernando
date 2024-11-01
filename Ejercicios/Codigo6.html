@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario con Botones Radio</title>
+    <script>
+        function calcular(form, campo) {
+            if (campo === "resultado") {
+                if (form.accion[0].checked) { // Doble
+                    form.entrada.value = form.resultado.value * 2;
+                } else if (form.accion[1].checked) { // Raíz
+                    form.entrada.value = Math.sqrt(form.resultado.value);
+                }
+            } else {
+                if (form.accion[0].checked) { // Doble
+                    form.resultado.value = form.entrada.value * 2;
+                } else if (form.accion[1].checked) { // Raíz
+                    form.resultado.value = form.entrada.value * form.entrada.value;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Formulario con Botones Radio</h1>
+
+    <form method="post">
+        <label for="entrada">Valor de Entrada:</label>
+        <input type="text" name="entrada" value="0" onchange="calcular(this.form, 'entrada');" />
+        <br><br>
+
+        <label>Acción:</label><br>
+        <input type="radio" name="accion" value="doble" onclick="calcular(this.form, 'accion');" checked> Doble<br>
+        <input type="radio" name="accion" value="raiz" onclick="calcular(this.form, 'accion');"> Raíz<br>
+        <br>
+
+        <label for="resultado">Resultado:</label>
+        <input type="text" name="resultado" value="0" onchange="calcular(this.form, 'resultado');" />
+    </form>
+</body>
+</html>

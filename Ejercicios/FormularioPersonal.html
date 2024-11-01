@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario con Alerta</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 130vh;
+            background-color: #f0f0f0;
+        }
+        form {
+            width: 900px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        fieldset {
+            border: 1px solid black;
+            padding: 10px;
+            margin: 0;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        legend {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        select {
+            width: 95%;
+        }
+        .btns {
+            margin: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn {
+            height: 35px;
+            width: 100px;
+            border-radius: 10px;
+            font-size: medium;
+            font-weight: bold;
+        }
+        .btn.res {
+            background-color: red;
+            color: white;
+        }
+        .btn.sub {
+            background-color: greenyellow;
+            color: black;
+        }
+        .input {
+            height: 30px;
+            width: 95%;
+            background-color: rgb(246, 246, 246);
+            font-size: medium;
+            font-weight: 400;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        <fieldset>
+            <legend>Datos básicos</legend>
+            <label>Nombre</label>
+            <input type="text" name="FirstName" maxlength="20" class="input" required/>
+            <br>
+            <label>Apellidos</label>
+            <input type="text" name="LastName" maxlength="20" class="input" required/>
+            <br>
+            <label>Sexo</label>
+            <input type="radio" name="sexo" value="M" required> M
+            <input type="radio" name="sexo" value="F"> F
+            <input type="radio" name="sexo" value="O"> O
+            <label>Edad</label>
+            <input type="number" name="Edad" min="1" max="115" class="input" required/>
+            <label>Fecha de nacimiento</label>
+            <input type="date" name="fecha_nac" id="fnac" required>
+            <br>
+            <label>Correo</label>
+            <input type="email" name="email" class="input" required/>
+            <br>
+            <label>Teléfono</label>
+            <input type="tel" name="telefono" class="input" required/>
+            <br>
+            <label>Domicilio</label>
+            <input type="text" name="domicilio" class="input" required>
+            <br>
+            <label>Estado</label>
+            <select name="estados" id="estados" size="3" required>
+                <option value="michoacan">Michoacan</option>
+                <option value="Monterrey">Monterrey</option>
+                <option value="Oaxaca">Oaxaca</option>
+                <option value="Baja California">Baja California</option>
+                <option value="Jalisco">Jalisco</option>
+            </select>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend>Datos Académicos</legend>
+            <label>Nivel de estudios</label>
+            <select name="estudios" id="estudios" size="3" required>
+                <option value="kinder">kinder</option>
+                <option value="primaria">primaria</option>
+                <option value="secundaria">secundaria</option>
+                <option value="preparatoria">preparatoria</option>
+                <option value="profesional">profesional</option>
+                <option value="maestria">maestria</option>
+                <option value="doctorado">doctorado</option>
+            </select>
+            <label>Nombre de escuela último grado</label>
+            <input type="text" id="ultimo_grado" maxlength="50" class="input" required>
+            <label>Habilidades</label>
+            <div class="grid-container">
+                <div><input type="checkbox" name="exp_escri"> Expresión escrita</div>
+                <div><input type="checkbox" name="exp_oral"> Expresión oral</div>
+                <div><input type="checkbox" name="rel_inter"> Relaciones interpersonales</div>
+                <div><input type="checkbox" name="analitica"> Analíticas</div>
+            </div>
+            <label>Otras Habilidades</label>
+            <textarea name="otras_habilidades" maxlength="1000"></textarea>
+        </fieldset>
+        <div class="btns">
+            <input type="reset" value="Reset" class="btn res"/>
+            <input type="submit" value="Submit" class="btn sub">
+        </div>
+    </form>
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario
+            // Obtener los datos del formulario
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            const habilidades = [];
+            // Obtener las habilidades seleccionadas
+            const checkboxHabilidades = document.querySelectorAll('input[type="checkbox"]');
+            checkboxHabilidades.forEach(checkbox => {
+                if (checkbox.checked) {
+                    habilidades.push(checkbox.name);
+                }
+            });
+            // Crear un mensaje para la alerta
+            let message = `
+                Nombre: ${data.FirstName}\n
+                Apellidos: ${data.LastName}\n
+                Sexo: ${data.sexo}\n
+                Edad: ${data.Edad}\n
+                Fecha de Nacimiento: ${data.fecha_nac}\n
+                Correo: ${data.email}\n
+                Teléfono: ${data.telefono}\n
+                Domicilio: ${data.domicilio}\n
+                Estado: ${data.estados}\n
+                Nivel de Estudios: ${data.estudios}\n
+                Nombre de Escuela: ${data.ultimo_grado}\n
+                Habilidades: ${habilidades.join(', ')}\n
+                Otras Habilidades: ${data.otras_habilidades}
+            `;
+            // Mostrar la alerta
+            alert(message);
+        });
+    </script>
+</body>
+</html>

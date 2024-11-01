@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario con API Georef México</title>
+    <script>
+        async function obtenerEstados() {
+            try {
+                const respuesta = await fetch('https://gaia.inegi.org.mx/wscatgeo/mgee');
+                if (!respuesta.ok) {
+                    throw new Error('Error al obtener los estados');
+                }
+                const datos = await respuesta.json();
+                console.log("Hola")
+                return datos.datos;
+            } catch (error) {
+                console.error(error);
+                return [];
+            }
+        }
+        async function cargarEstados() {
+            const estados = await obtenerEstados();
+            const estadoSelect = document.getElementById('estado');
+            estadoSelect.innerHTML = '<option value="">Selecciona un estado</option>';
+            estados.forEach( estado => {
+                const option = document.createElement('option');
+                option.value = estado.cvegeo;
+                option.textContent = estado.nom_agee;
+                estadoSelect.appendChild(option);
+            });
+        }
+        window.onload = function() {
+            cargarEstados();
+        }
+    </script>
+</head>
+<body>
+    <h2>Formulario de Registro</h2>
+    <form>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        <label for="estado">Selecciona tu Estado:</label>
+        <select name="estado" id="estado" required>
+            <option value="">Selecciona un estado</option>
+        </select><br><br>
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>

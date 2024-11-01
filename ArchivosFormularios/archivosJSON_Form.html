@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar y Cargar Datos JSON</title>
+</head>
+<body>
+    <h2>Formulario para guardar datos JSON en un archivo</h2>
+    <form id="jsonForm">
+        <label for="nombre_archivo">Nombre del archivo:</label>
+        <input type="text" id="arch" placeholder="Ingresa el nombre del archivo" oninput="checkInput()">
+        <br><br>
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" disabled><br><br>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" placeholder="Ingrese su edad" disabled><br><br>
+
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" name="ciudad" placeholder="Ingrese su ciudad" disabled><br><br>
+
+        <button type="button" id="saveButton" onclick="saveJSON()" disabled>Guardar JSON</button>
+    </form>
+
+    <h2>Selecciona un Archivo JSON</h2>
+    <input type="file" id="fileInput" accept="application/json">
+    <pre id="jsonContent"></pre>
+
+    <script>
+        // Habilitar campos del formulario si hay un nombre de archivo válido
+        function checkInput() {
+            var nomArchivo = document.getElementById("arch").value;
+            var nombre = document.getElementById("nombre");
+            var edad = document.getElementById("edad");
+            var ciudad = document.getElementById("ciudad");
+            var saveButton = document.getElementById("saveButton");
+            
+            if (nomArchivo.trim() !== "") {
+                nombre.disabled = false;
+                edad.disabled = false;
+                ciudad.disabled = false;
+                saveButton.disabled = false;
+            } else {
+                nombre.disabled = true;
+                edad.disabled = true;
+                ciudad.disabled = true;
+                saveButton.disabled = true;
+            }
+        }
+
+        // Guardar datos del formulario en un archivo JSON
+        function saveJSON() {
+            var form = document.getElementById("jsonForm");
+            var formData = new FormData(form);
+            var data = {
+                nombre: formData.get("nombre"),
+                edad: formData.get("edad"),
+                ciudad: formData.get("ciudad")
+            };
+
+            var nomArchivo = document.getElementById("arch").value;
+            if (!nomArchivo.endsWith(".json")) {
+                nomArchivo += ".json"; // Asegurarse de que el archivo tenga la extensión .json
+            }
+
+            var json = JSON.stringify(data, null, 2);
+            var blob = new Blob([json], {type: 'application/json'});
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = nomArchivo;
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+        }
+
+        // Leer datos de un archivo JSON y rellenar el formulario
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const contenido = e.target.result;
+                        const datos = JSON.parse(contenido);
+                        document.getElementById('nombre').value = datos.nombre || '';
+                        document.getElementById('edad').value = datos.edad || '';
+                        document.getElementById('ciudad').value = datos.ciudad || '';
+                    } catch (error) {
+                        console.log('Error al parsear el archivo JSON: ', error);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>

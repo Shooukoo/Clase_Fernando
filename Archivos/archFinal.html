@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Guardar datos en un archivo de texto</h2>
+    Nombre del archivo: 
+    <input type="text" id="arch" oninput="checkInput()" placeholder="Escribe el nombre del archivo" style="width: 200px;">
+    <br><br>
+    <textarea id="content" rows="10" cols="30" placeholder="Escribe algo aquí..." disabled></textarea><br><br>
+    <button id="saveButton" onclick="saveToFile()" disabled>Guardar en archivo</button>
+
+    <script>
+        function checkInput() {
+            var nomArchivo = document.getElementById("arch").value;
+            var contentArea = document.getElementById("content");
+            var saveButton = document.getElementById("saveButton");
+            
+            if (nomArchivo.trim() !== "") {
+                contentArea.disabled = false;
+                saveButton.disabled = false;
+            } else {
+                contentArea.disabled = true;
+                saveButton.disabled = true;
+            }
+        }
+
+        function saveToFile() {
+            var content = document.getElementById("content").value;
+            var nomArchivo = document.getElementById("arch").value;
+            var blob = new Blob([content], {type: "text/plain"});
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = nomArchivo + ".txt";
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+        }
+    </script>
+
+    <h2>Selecciona un archivo de texto (.txt)</h2>
+    <input type="file" id="fileInput" accept=".txt">
+    
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            var file = event.target.files[0]; // Acceder al archivo
+            if (file && file.type === "text/plain") {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('content').value = e.target.result; // Mostrar el contenido en el textarea
+                };
+                reader.readAsText(file); // Leer el archivo como texto
+            } else {
+                document.getElementById('content').value = "Por favor selecciona un archivo de texto (.txt)."; // Mensaje de error
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codigo del profe</title>
+    <!-- Incluimos Google Fonts para Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="date"], input[type="number"] {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+        .edit-btn, .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .edit-btn {
+            color: green;
+        }
+        .edit-btn:hover {
+            color: darkgreen;
+        }
+        .delete-btn {
+            color: red;
+        }
+        .delete-btn:hover {
+            color: darkred;
+        }
+        .material-icons {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h2>Datos personales</h2>
+    <!-- Formulario -->
+    <form id="personForm">
+        <label for="clave">Clave:</label><br>
+        <input type="text" id="clave" required><br>
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" required><br>
+        <label for="fechaNac">Fecha de nacimiento:</label><br>
+        <input type="date" id="fechaNac" required><br>
+        <label for="edad">Edad:</label><br>
+        <input type="number" id="edad" required><br>
+        <button type="submit" id="submitBtn">Agregar persona</button>
+    </form>
+    <!-- Botones para guardar y cargar los datos desde un archivo CSV -->
+    <button id="guardarBtn">Guardar en CSV</button>
+    <input type="file" id="cargarArchivo" accept=".csv" style="display:none;">
+    <button id="cargarBtn">Cargar desde CSV</button>
+    
+    <h2>Personas registradas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Clave</th>
+                <th>Nombre</th>
+                <th>Fecha de nacimiento</th>
+                <th>Edad</th>
+                <th>Acciones</th> <!-- Nueva columna para las acciones de editar y eliminar -->
+            </tr>
+        </thead>
+        <tbody id="personTableBody">
+        </tbody>
+    </table>
+    <script>
+        let personas = [];
+        let editIndex = -1;
+        const form = document.getElementById('personForm');
+        const claveInput = document.getElementById('clave');
+        const nombreInput = document.getElementById('nombre');
+        const fechaNacInput = document.getElementById('fechaNac');
+        const edadInput = document.getElementById('edad');
+        const tableBody = document.getElementById('personTableBody');
+        const submitBtn = document.getElementById('submitBtn');
+        const guardarBtn = document.getElementById('guardarBtn');
+        const cargarBtn = document.getElementById('cargarBtn');
+        const cargarArchivo = document.getElementById('cargarArchivo'); // Input oculto para seleccionar el archivo
+
+        // Evento para agregar o guardar cambios
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const persona = {
+                clave: claveInput.value,
+                nombre: nombreInput.value,
+                fechaNac: fechaNacInput.value,
+                edad: edadInput.value
+            };
+            if (editIndex === -1) {
+                personas.push(persona);
+            } else {
+                personas[editIndex] = persona;
+                editIndex = -1;
+                submitBtn.textContent = 'Agregar persona';
+            }
+            form.reset();
+            actualizarTabla();
+        });
+
+        // Función para actualizar la tabla
+        function actualizarTabla() {
+            tableBody.innerHTML = '';
+            personas.forEach(function(persona, index) {
+                const row = document.createElement('tr');
+                const claveCell = document.createElement('td');
+                claveCell.textContent = persona.clave;
+                const nombreCell = document.createElement('td');
+                nombreCell.textContent = persona.nombre;
+                const fechaNacCell = document.createElement('td');
+                fechaNacCell.textContent = persona.fechaNac;
+                const edadCell = document.createElement('td');
+                edadCell.textContent = persona.edad;
+                const actionCell = document.createElement('td');
+                const editBtn = document.createElement('button');
+                editBtn.classList.add('edit-btn');
+                editBtn.innerHTML = '<span class="material-icons">edit</span>';
+                editBtn.addEventListener('click', function() {
+                    cargarDatosParaEditar(index);
+                });
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.innerHTML = '<span class="material-icons">delete</span>';
+                deleteBtn.addEventListener('click', function() {
+                    eliminarPersona(index);
+                });
+                actionCell.appendChild(editBtn);
+                actionCell.appendChild(deleteBtn);
+                row.appendChild(claveCell);
+                row.appendChild(nombreCell);
+                row.appendChild(fechaNacCell);
+                row.appendChild(edadCell);
+                row.appendChild(actionCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Función para cargar datos en el formulario para edición
+        function cargarDatosParaEditar(index) {
+            const persona = personas[index];
+            claveInput.value = persona.clave;
+            nombreInput.value = persona.nombre;
+            fechaNacInput.value = persona.fechaNac;
+            edadInput.value = persona.edad;
+            editIndex = index;
+            submitBtn.textContent = 'Guardar cambios';
+        }
+
+        // Función para eliminar una persona por índice
+        function eliminarPersona(index) {
+            personas.splice(index, 1);
+            actualizarTabla();
+        }
+
+        // Función para convertir datos a CSV y guardarlos
+        guardarBtn.addEventListener('click', function() {
+            let csvContent = 'Clave,Nombre,Fecha de nacimiento,Edad\n';
+            personas.forEach(persona => {
+                csvContent += `${persona.clave},${persona.nombre},${persona.fechaNac},${persona.edad}\n`;
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'personas.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+
+        // Evento para abrir el input de archivo oculto al hacer clic en el botón de cargar
+        cargarBtn.addEventListener('click', function() {
+            cargarArchivo.click();
+        });
+
+        // Evento para cargar datos desde el archivo CSV seleccionado
+        cargarArchivo.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const lines = event.target.result.split('\n');
+                    personas = []; // Limpiar el array antes de cargar los nuevos datos
+                    lines.slice(1).forEach(line => {
+                        const [clave, nombre, fechaNac, edad] = line.split(',');
+                        if (clave && nombre && fechaNac && edad) { // Asegurarse de que no esté vacío
+                            personas.push({ clave, nombre, fechaNac, edad });
+                        }
+                    });
+                    actualizarTabla();
+                };
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>

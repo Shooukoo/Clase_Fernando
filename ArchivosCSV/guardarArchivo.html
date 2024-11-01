@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar datos CSV en archivo</title>
+</head>
+<body>
+    <h2>Guardar datos CSV en archivo</h2>
+    <button onclick="saveCSV()">Guardar CSV</button>
+
+    <script>
+        function saveCSV() {
+            var data = "Nombre,Edad,Ciudad\nJuan,30,Madrid\nMaria,25,Barcelona";
+            var blob = new Blob([data], {type:"text/csv"});
+
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "datos.csv";
+            link.click();
+            window.URL.revokeObjectURL(link.href)
+        }
+    </script>
+</body>
+</html>

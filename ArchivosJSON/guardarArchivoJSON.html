@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar JSON en un Archivo</title>
+</head>
+<body>
+    <h2>Guardar datos JSON en un archivo</h2>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" placeholder="Ingrese su nombre"><br><br>
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" placeholder="Ingrese su edad"><br><br>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudad" placeholder="Ingrese su ciudad"><br><br>
+    <button onclick="saveJSON()">Guardar JSON</button>
+    <script>
+        function saveJSON() {
+            var data = {
+                nombre: document.getElementById("nombre").value,
+                edad: document.getElementById("edad").value,
+                ciudad: document.getElementById("ciudad").value
+            };
+            var json = JSON.stringify(data, null, 2);
+            var blob = new Blob([json], {type: 'application/json'});
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "datos.json";
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Guardar datos JSON en un archivo</h2>
+    <label for="nombre_archivo">Nombre del archivo</label>
+    <input type="text" id="arch" placeholder="Ingresa el nombre del archivo" onfocus oninput="checkInput()">
+    <br><br>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" placeholder="Ingrese su nombre" disabled><br><br>
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" placeholder="Ingrese su edad" disabled><br><br>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudad" placeholder="Ingrese su ciudad" disabled><br><br>
+    <button id="saveButton" onclick="saveJSON()" disabled>Guardar JSON</button>
+    <script>
+        function checkInput() {
+            var nomArchivo = document.getElementById("arch").value;
+            var nombre = document.getElementById("nombre");
+            var edad = document.getElementById("edad");
+            var ciudad = document.getElementById("ciudad");
+            var saveButton = document.getElementById("saveButton");
+            
+            if (nomArchivo.trim() !== "") {
+                nombre.disabled = false;
+                edad.disabled = false;
+                ciudad.disabled = false;
+                saveButton.disabled = false;
+            } else {
+                nombre.disabled = true;
+                edad.disabled = true;
+                ciudad.disabled = true;
+                saveButton.disabled = true;
+            }
+        }
+
+        function saveJSON() {
+            var data = {
+                nombre: document.getElementById("nombre").value,
+                edad: document.getElementById("edad").value,
+                ciudad: document.getElementById("ciudad").value
+            };
+            var nomArchivo = document.getElementById("arch").value;
+            var json = JSON.stringify(data, null, 2);
+            var blob = new Blob([json], {type: 'application/json'});
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = nomArchivo,".json";
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+        }
+    </script>
+    <br><br>
+    <h2>Selecciona un Archivo JSON</h2>
+    <input type="file" id="fileInput" accept="application/json">
+    <pre id="jsonContent"></pre>
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    try{
+                        const contenido = e.target.result;
+                        const datos = JSON.parse(contenido);
+                        document.getElementById('nombre').value = datos.nombre;
+                        document.getElementById('edad').value = datos.edad;
+                        document.getElementById('ciudad').value = datos.ciudad;
+                    }
+                    catch(error){
+                        console.log('Error al parsear el archivo JSON: ', error)
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>

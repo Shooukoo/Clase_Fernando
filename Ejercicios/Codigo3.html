@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario para cálculos matemáticos</title>
+    <script>
+        // Función segura para evaluar expresiones matemáticas básicas
+        function calcular(form) {
+            const expresion = form.entrada.value;
+            if (validarExpresion(expresion)) {
+                try {
+                    // Evaluamos la expresión de forma segura
+                    form.resultado.value = eval(expresion);
+                } catch (error) {
+                    form.resultado.value = "Error en la expresión";
+                }
+            } else {
+                form.resultado.value = "Expresión no válida";
+            }
+        }
+
+        // Validamos que la expresión solo contenga caracteres numéricos y operadores válidos
+        function validarExpresion(expresion) {
+            const validRegex = /^[0-9+\-*/().\s]+$/;
+            return validRegex.test(expresion);
+        }
+
+        // Asignamos la expresión desde el prompt (opcional, no es la mejor UX)
+        function getExpresion(form) {
+            form.entrada.blur();
+            const expresion = prompt("Introduce la expresión matemática:", "expresión");
+            if (validarExpresion(expresion)) {
+                form.entrada.value = expresion;
+                calcular(form);
+            } else {
+                form.resultado.value = "Expresión no válida";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Formulario para cálculos matemáticos</h1>
+
+    <form method="post">
+        <label for="entrada">Introduce una expresión matemática:</label>
+        <input type="text" id="entrada" name="entrada" onchange="calcular(this.form);" />
+        <br><br>
+
+        <label for="resultado">El resultado de la expresión es:</label>
+        <input type="text" id="resultado" name="resultado" value="" readonly />
+        <br><br>
+
+        <input type="button" value="Obtener expresión (opcional)" onclick="getExpresion(this.form);" />
+    </form>
+</body>
+</html>

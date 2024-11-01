@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardar datos CSV en archivo</title>
+</head>
+<body>
+    <h2>Guardar datos CSV en archivo</h2>
+
+    <!-- Inputs para ingresar los datos -->
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br><br>
+
+    <label for="edad">Edad:</label>
+    <input type="text" id="edad" name="edad"><br><br>
+
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudad" name="ciudad"><br><br>
+
+    <button onclick="addRow()">Agregar Datos</button><br><br>
+
+    <h3>Datos actuales:</h3>
+    <table border="1" id="dataTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Ciudad</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table><br>
+
+    <button onclick="saveCSV()">Guardar CSV</button>
+
+    <script>
+        var dataRows = [];
+
+        // Función para agregar una fila con los datos del input
+        function addRow() {
+            var nombre = document.getElementById('nombre').value;
+            var edad = document.getElementById('edad').value;
+            var ciudad = document.getElementById('ciudad').value;
+
+            if(nombre && edad && ciudad) { // Verificamos que los inputs no estén vacíos
+                var table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+                var newRow = table.insertRow(); // Insertar nueva fila
+
+                var nombreCell = newRow.insertCell(0);
+                var edadCell = newRow.insertCell(1);
+                var ciudadCell = newRow.insertCell(2);
+
+                nombreCell.textContent = nombre;
+                edadCell.textContent = edad;
+                ciudadCell.textContent = ciudad;
+
+                // Agregamos los datos al array de filas
+                dataRows.push([nombre, edad, ciudad]);
+
+                // Limpiar los campos de input
+                document.getElementById('nombre').value = '';
+                document.getElementById('edad').value = '';
+                document.getElementById('ciudad').value = '';
+            } else {
+                alert("Por favor, completa todos los campos.");
+            }
+        }
+
+        // Función para guardar los datos como archivo CSV
+        function saveCSV() {
+            var csvContent = "Nombre,Edad,Ciudad\n"; // Cabeceras del archivo CSV
+            dataRows.forEach(function(rowArray) {
+                var row = rowArray.join(","); // Convertimos el array en una fila CSV
+                csvContent += row + "\n"; // Agregamos la fila al contenido del CSV
+            });
+
+            var blob = new Blob([csvContent], { type: "text/csv" });
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "datos.csv";
+            link.click();
+
+            window.URL.revokeObjectURL(link.href); // Limpiamos el URL temporal
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de personas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="date"], input[type="number"] {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 100%;
+        } 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        button{
+            padding: 5px 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkred;
+        }
+        #saveJsonButton {
+            background-color: green;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        #saveJsonButton:hover {
+            background-color: darkgreen;
+        }
+        #personTableBody {
+            display: block;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        #personTableBody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        thead, tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+    </style>
+</head>
+<body>
+    <h2>Formulario de registro de personas</h2>
+
+    <form id="personForm">
+        <label for="clave">Clave:</label><br>
+        <input type="text" id="clave" required><br>
+        <label for="nombre">Nombre::</label><br>
+        <input type="text" id="nombre" required><br>
+        <label for="fechaNac">Fecha de nacimiento:</label><br>
+        <input type="date" id="fechaNac" required><br>
+        <label for="edad">Edad:</label><br>
+        <input type="number" id="edad" required><br>
+        <button type="submit">Agregar persona</button>
+    </form>
+
+    <h2>Personas Registras</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Clave</th>
+                <th>Nombre</th>
+                <th>Fecha de nacimiento</th>
+                <th>Edad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="personaTablebody">
+            <!-- Aqui se mostraran los registros -->
+        </tbody>
+    </table>
+
+    <button id="saveJsonButton">Guardar en JSON</button>
+
+    <script>
+        let personas = [];
+
+        const form = document.getElementById('personForm');
+        const claveInput = document.getElementById('clave');
+        const nombreInput = document.getElementById('nombre');
+        const fechaNacInput = document.getElementById('fechaNac');
+        const edadInput = document.getElementById('edad');
+        const tableBody = document.getElementById('personTableBody');
+        const saveJsonButton = document.getElementById('saveJsonButton');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const persona = {
+                clave: claveInput.value,
+                nombre: nombreInput.value,
+                fechaNac: fechaNacInput.value,
+                edad: edadInput.vaue
+            };
+
+            personas.push(persona);
+
+            form.reset();
+
+            actualizarTabla();
+        });
+
+        function actualizarTabla() {
+            tableBody.innerHTML = '';
+
+            personas.forEach(function(persona, index) {
+                const row = document.createElement('tr');
+
+                const claveCell = document.createElement('td');
+                claveCell.textContent = persona.clave;
+
+                const nombreCell = document.createElement('td');
+                claveCell.textContent = persona.nombre;
+
+                const fechaNacCell = document.createElement('td');
+                claveCell.textContent = persona.fechaNac;
+
+                const edadCell = document.createElement('td');
+                claveCell.textContent = persona.edad;
+
+                const accionesCell = document.createElement('td');
+                const eliminarButton = document.createElement('button');
+                eliminarButton.textContent = 'Eliminar';
+                eliminarButton.addEventListener('click', function() {
+                    eliminarPersona(index);
+                });
+
+                accionesCell.appendChild(eliminarButton);
+
+                row.appendChild(claveCell);
+                row.appendChild(nombreCell);
+                row.appendChild(fechaNacCell);
+                row.appendChild(edadCell);
+                row.appendChild(accionesCell);
+
+                tableBody.appendChild(row);
+            })
+        }
+
+        function eliminarPersona(index) {
+            personas.splice(index, 1);
+            actualizarTabla();
+        }
+
+        saveJsonButton.addEventListener('click', function() {
+            const jsonData = JSON.stringify(personas, null, 2);
+            const blob = new Blob([jsonData], {type: 'aplication/json'});
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'personas.json';
+            a.click();
+
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

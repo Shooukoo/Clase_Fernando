@@ -1,0 +1,38 @@
+<HTML>
+    <HEAD>
+    <TITLE> Opciones </TITLE>
+    <SCRIPT LANGUAGE="JavaScript">
+    <!-- HIDE FROM OTHERS BROWSERS
+        function operacion(form)
+        {
+            var resultado = 0;
+            switch (form.seleccion.value)
+            {
+                case "suma": resultado = 1 * form.valor1.value + 1 * form.valor2.value; break;
+                case "resta": resultado = form.valor1.value - form.valor2.value; break;
+                case "multiplicacion": resultado = form.valor1.value * form.valor2.value; break;
+                case "division": resultado = form.valor1.value / form.valor2.value; break;
+            }
+            form.resultado.value = resultado;
+        }
+    // STOP HIDING FROM OTHERS BROWSERS -->
+    </SCRIPT>
+    </HEAD>
+    <BODY>
+    <FORM METHOD=POST>
+        Valor 1: <INPUT TYPE="text" NAME="valor1" VALUE=0> <BR>
+        Valor 2: <INPUT TYPE="text" NAME="valor2" VALUE=0> <BR>
+        <SELECT NAME="seleccion" SIZE=3>
+            <OPTION VALUE="suma">Suma</OPTION>
+            <OPTION VALUE="resta">Resta</OPTION>
+            <OPTION VALUE="multiplicacion">Multiplicacion</OPTION>
+            <OPTION VALUE="division">Division</OPTION>
+        </SELECT>
+        <BR>
+        Resultado: <INPUT TYPE="text" NAME="resultado" VALUE="">
+        <BR>
+        <INPUT TYPE="button" NAME="Calcular" VALUE="CALCULAR" onClick="operacion(this.form);">
+    </FORM>
+    </BODY>
+    </HTML>
+    

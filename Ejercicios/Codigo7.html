@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario con Checkbox</title>
+    <script>
+        function calcular(form, campo) {
+            if (campo === "resultado") {
+                if (form.cuadrado.checked) {
+                    form.entrada.value = Math.sqrt(form.resultado.value);
+                } else {
+                    form.entrada.value = form.resultado.value / 2;
+                }
+            } else {
+                if (form.cuadrado.checked) {
+                    form.resultado.value = form.entrada.value * form.entrada.value;
+                } else {
+                    form.resultado.value = form.entrada.value * 2;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Formulario con Checkbox</h1>
+
+    <form method="post">
+        <label for="entrada">Valor de Entrada:</label>
+        <input type="text" name="entrada" value="0" onchange="calcular(this.form, 'entrada');" />
+        <br><br>
+
+        <label>
+            <input type="checkbox" name="cuadrado" onclick="calcular(this.form, 'cuadrado');"> Elevar al cuadrado (por defecto doble)
+        </label>
+        <br><br>
+
+        <label for="resultado">Resultado:</label>
+        <input type="text" name="resultado" value="0" onchange="calcular(this.form, 'resultado');" />
+    </form>
+</body>
+</html>

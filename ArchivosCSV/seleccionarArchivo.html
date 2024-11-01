@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leer y Mostrar</title>
+</head>
+<body>
+    <h2>Selecciona un archivo CSV</h2>
+    <input type="file" id="fileInput" accept=".csv"> <br><br>
+    <label for="nombreLabel">Nombre</label>
+    <span id="nombreLabel"></span> <br>
+    <label for="edadLabel">Edad</label>
+    <span id="edadLabel"></span> <br>
+    <label for="ciudadLabel">Ciudad</label>
+    <span id="ciudadLabel"></span> <br>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event){
+            var file = event.target.files[0]; // Obtenemos el archivo seleccionado
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var csv = e.target.result;
+                    var lines = csv.split("\n"); // Dividimos por lineas
+                    var headers = lines[0].split(","); // Cabeceras "Nombre, Edad, Ciudad"
+                    var data = lines[1].split(","); // Primeras lineas "Juan, 30, Madrid"
+                    document.getElementById('nombreLabel').textContent = data[0]; // Nombre
+                    document.getElementById('edadLabel').textContent = data[1]; // Edad
+                    document.getElementById('ciudadLabel').textContent = data[2]; // Ciudad
+                }
+                reader.readAsText(file);
+            }
+        });
+    </script>
+</body>
+</html>

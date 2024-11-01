@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programa Formulario Cálculos</title>
+    <script>
+        function calcular(form, campo) {
+            if (campo === "entrada") {
+                form.porDos.value = form.entrada.value * 2;
+                form.cuadrado.value = form.entrada.value * form.entrada.value;
+            } else if (campo === "porDos") {
+                form.entrada.value = form.porDos.value / 2;
+                form.cuadrado.value = form.entrada.value * form.entrada.value;
+            } else if (campo === "cuadrado") {
+                form.entrada.value = Math.sqrt(form.cuadrado.value);
+                form.porDos.value = form.entrada.value * 2;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Programa de Formulario Cálculos</h1>
+
+    <form method="post">
+        <label for="entrada">Entrada:</label>
+        <input type="text" name="entrada" value="0" onchange="calcular(this.form, 'entrada');" />
+        <br><br>
+
+        <label for="porDos">Doble:</label>
+        <input type="text" name="porDos" value="0" onchange="calcular(this.form, 'porDos');" />
+        <br><br>
+
+        <label for="cuadrado">Cuadrado:</label>
+        <input type="text" name="cuadrado" value="0" onchange="calcular(this.form, 'cuadrado');" />
+    </form>
+</body>
+</html>
+
