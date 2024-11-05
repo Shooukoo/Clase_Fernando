@@ -65,6 +65,15 @@
                 width: 100%;
                 table-layout: fixed;
             }
+            #cancelButton {
+                display: none;
+                background-color: gray;
+                color: white;
+                margin-left: 10px;
+            }
+            #cancelButton:hover {
+                background-color: darkgray;
+            }
         </style>
     </head>
     <body>
@@ -84,7 +93,8 @@
             <label for="edad">Edad:</label><br>
             <input type="number" id="edad" required><br>
 
-            <button type="submit">Agregar Persona</button>
+            <button type="submit" id="submitButton">Agregar Persona</button>
+            <button type="button" id="cancelButton">Cancelar</button>
         </form>
 
         <h2>Personas Registradas</h2>
@@ -123,6 +133,8 @@
             const saveCsvButton = document.getElementById('saveCsvButton');
             const loadCsvButton = document.getElementById('loadCsvButton');
             const csvFileInput = document.getElementById('csvFileInput');
+            const submitButton = document.getElementById('submitButton');
+            const cancelButton = document.getElementById('cancelButton');
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -139,10 +151,19 @@
                 } else {
                     personas[editIndex] = persona;
                     editIndex = null;
+                    submitButton.textContent = "Agregar Persona";
+                    cancelButton.style.display = "none";
                 }
 
                 form.reset();
                 actualizarTabla();
+            });
+
+            cancelButton.addEventListener('click', function() {
+                form.reset();
+                submitButton.textContent = "Agregar Persona";
+                cancelButton.style.display = "none";
+                editIndex = null;
             });
 
             function actualizarTabla() {
@@ -202,6 +223,8 @@
                 fechaNacInput.value = persona.fechaNac;
                 edadInput.value = persona.edad;
 
+                submitButton.textContent = "Guardar Cambios";
+                cancelButton.style.display = "inline";
                 editIndex = index;
             }
 
