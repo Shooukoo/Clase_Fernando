@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro de Personas</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            form {
+                margin-bottom: 20px;
+            }
+            input[type="text"], input[type="date"], input[type="number"] {
+                margin-bottom: 10px;
+                padding: 8px;
+                width: 100%;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            table, th, td {
+                border: 1px solid black;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #007bff;
+                color: white;
+            }
+            button {
+                padding: 5px 10px;
+                background-color: red;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+            button:hover {
+                background: darkred;
+            }
+            #saveCsvButton, #loadCsvButton {
+                background-color: green;
+                margin-top: 20px;
+                cursor: pointer;
+            }
+            #saveCsvButton:hover, #loadCsvButton:hover {
+                background-color: darkgreen;
+            }
+            #personTableBody {
+                display: block;
+                max-height: 150px;
+                overflow-y: auto;
+            }
+            #personTableBody tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+            thead, tbody tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Formulario de Registro de Personas</h2>
+
+        <!--Formulario para agregar personas-->
+        <form id="personForm">
+            <label for="clave">Clave:</label><br>
+            <input type="text" id="clave" required><br>
+
+            <label for="nombre">Nombre:</label><br>
+            <input type="text" id="nombre" required><br>
+
+            <label for="fechaNac">Fecha de Nacimiento:</label><br>
+            <input type="date" id="fechaNac" required><br>
+
+            <label for="edad">Edad:</label><br>
+            <input type="number" id="edad" required><br>
+
+            <button type="submit">Agregar Persona</button>
+        </form>
+
+        <h2>Personas Registradas</h2>
+
+        <!--Tabla para mostrar los registros de personas-->
+        <table>
+            <thead>
+                <tr>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Edad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="personTableBody">
+                <!--Aquí se mostrarán los registros-->
+            </tbody>
+        </table>
+
+        <!--Botones para guardar y cargar registros como archivo CSV-->
+        <button id="saveCsvButton">Guardar en CSV</button>
+        <input type="file" id="csvFileInput" accept=".csv">
+        <button id="loadCsvButton">Cargar desde CSV</button>
+
+        <script>
+            let personas = [];
+            let editIndex = null;
+
+            const form = document.getElementById('personForm');
+            const claveInput = document.getElementById('clave');
+            const nombreInput = document.getElementById('nombre');
+            const fechaNacInput = document.getElementById('fechaNac');
+            const edadInput = document.getElementById('edad');
+            const tableBody = document.getElementById('personTableBody');
+            const saveCsvButton = document.getElementById('saveCsvButton');
+            const loadCsvButton = document.getElementById('loadCsvButton');
+            const csvFileInput = document.getElementById('csvFileInput');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const persona = {
+                    clave: claveInput.value,
+                    nombre: nombreInput.value,
+                    fechaNac: fechaNacInput.value,
+                    edad: edadInput.value
+                };
+
+                if (editIndex === null) {
+                    personas.push(persona);
+                } else {
+                    personas[editIndex] = persona;
+                    editIndex = null;
+                }
+
+                form.reset();
+                actualizarTabla();
+            });
+
+            function actualizarTabla() {
+                tableBody.innerHTML = '';
+
+                personas.forEach(function(persona, index) {
+                    const row = document.createElement('tr');
+
+                    const claveCell = document.createElement('td');
+                    claveCell.textContent = persona.clave;
+
+                    const nombreCell = document.createElement('td');
+                    nombreCell.textContent = persona.nombre;
+
+                    const fechaNacCell = document.createElement('td');
+                    fechaNacCell.textContent = persona.fechaNac;
+
+                    const edadCell = document.createElement('td');
+                    edadCell.textContent = persona.edad;
+
+                    const accionesCell = document.createElement('td');
+                    const eliminarButton = document.createElement('button');
+                    eliminarButton.textContent = 'Eliminar';
+                    eliminarButton.addEventListener('click', function() {
+                        eliminarPersona(index);
+                    });
+
+                    const modificarButton = document.createElement('button');
+                    modificarButton.textContent = 'Modificar';
+                    modificarButton.addEventListener('click', function() {
+                        modificarPersona(index);
+                    });
+
+                    accionesCell.appendChild(eliminarButton);
+                    accionesCell.appendChild(modificarButton);
+
+                    row.appendChild(claveCell);
+                    row.appendChild(nombreCell);
+                    row.appendChild(fechaNacCell);
+                    row.appendChild(edadCell);
+                    row.appendChild(accionesCell);
+
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function eliminarPersona(index) {
+                personas.splice(index, 1);
+                actualizarTabla();
+            }
+
+            function modificarPersona(index) {
+                const persona = personas[index];
+
+                claveInput.value = persona.clave;
+                nombreInput.value = persona.nombre;
+                fechaNacInput.value = persona.fechaNac;
+                edadInput.value = persona.edad;
+
+                editIndex = index;
+            }
+
+            //Guardar el arreglo en formato CSV y permitir descarga
+            saveCsvButton.addEventListener('click', function() {
+                let csvContent = 'Clave,Nombre,Fecha de Nacimiento,Edad\n';
+
+                personas.forEach(persona => {
+                    const row = `${persona.clave},${persona.nombre},${persona.fechaNac},${persona.edad}`;
+                    csvContent += row + "\n";
+                });
+
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'personas.csv';
+                a.click();
+
+                URL.revokeObjectURL(url);
+            });
+
+            //Cargar el archivo CSV y convertirlo a objetos
+            loadCsvButton.addEventListener('click', function() {
+                const file = csvFileInput.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const rows = e.target.result.split("\n");
+
+                        //Ignorar la primera fila (encabezados)
+                        personas = rows.slice(1).map(row => {
+                            const [clave, nombre, fechaNac, edad] = row.split(",").map(item => item.trim());
+                            return { clave, nombre, fechaNac, edad: parseInt(edad) };
+                        }).filter(persona => persona.clave);
+
+                        actualizarTabla();
+                    };
+
+                    reader.readAsText(file);
+                } else {
+                    alert("Por favor selecciona un archivo CSV.");
+                }
+            });
+        </script>
+    </body>
+</html>
