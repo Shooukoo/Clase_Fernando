@@ -1,3 +1,5 @@
+import { Controller } from '../controllers/controller.js';
+
 const View = {
     tableBody: document.getElementById('personTableBody'),
     claveInput: document.getElementById('clave'),

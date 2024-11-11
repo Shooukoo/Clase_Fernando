@@ -1,3 +1,6 @@
+import {Model} from '../models/model.js';
+import {View} from '../views/view.js';
+
 const Constroller = {
     editIndex: null,
     csvFileInput: document.getElementById('csvFileInpur'),

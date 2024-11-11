@@ -1,3 +1,5 @@
+import {Controller} from '../controllers/controller.js';
+
 const Model = {
     personas: [],
     agregarPersona(persona) {
