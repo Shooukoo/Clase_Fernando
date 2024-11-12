@@ -1,6 +1,6 @@
 import { Controller } from '../controllers/controller.js';
 
-const View = {
+export const View = {
     tableBody: document.getElementById('personTableBody'),
     claveInput: document.getElementById('clave'),
     nombreInput: document.getElementById('nombre'),
@@ -13,16 +13,22 @@ const View = {
         personas.forEach((persona, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-            <td>${persona.clave}</td>
-            <td>${persona.nombre}</td>
-            <td>${persona.fechaNac}</td>
-            <td>${persona.edad}</td>
-            <td>
-                <button onclick = "Controller.eliminarPersona(${index})">Eliminar</button>
-                <button onclick = "Controller.modificarPersona(${index})">Modificar</button>
-            </td>
+                <td>${persona.clave}</td>
+                <td>${persona.nombre}</td>
+                <td>${persona.fechaNac}</td>
+                <td>${persona.edad}</td>
+                <td>
+                    <button id="eliminar-${index}">Eliminar</button>
+                    <button id="modificar-${index}">Modificar</button>
+                </td>
             `;
             this.tableBody.appendChild(row);
+            document.getElementById(`eliminar-${index}`).addEventListener('click', () => {
+                Controller.eliminarPersona(index);
+            });
+            document.getElementById(`modificar-${index}`).addEventListener('click', () => {
+                Controller.modificarPersona(index);
+            });
         });
     },
     obtenerFormulario() {
@@ -30,7 +36,7 @@ const View = {
             clave: this.claveInput.value,
             nombre: this.nombreInput.value,
             fechaNac: this.fechaNacInput.value,
-            edad: parseInt(this.edadInput.value)
+            edad: parseInt(this.edadInput.value) 
         };
     },
     resetearFormulario() {
@@ -38,8 +44,8 @@ const View = {
         this.nombreInput.value = '';
         this.fechaNacInput.value = '';
         this.edadInput.value = '';
-        this.submitButton.value = "Agregar persona";
-        this.cancelButton.value = 'none';
+        this.submitButton.textContent = "Agregar persona";
+        this.cancelButton.style.display = 'none';
     },
     configurarFormularioParaEdicion() {
         this.submitButton.textContent = "Guardar Cambios";

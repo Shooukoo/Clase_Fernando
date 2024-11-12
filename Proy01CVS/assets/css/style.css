@@ -1,13 +1,23 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #f4f4f4;
 }
+
+
 h2 {
     color: #333;
+    text-align: center;
 }
+
 form {
     margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 input[type="text"],
 input[type="date"],
 input[type="number"] {
@@ -16,41 +26,74 @@ input[type="number"] {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
 }
+
 button {
     padding: 8px 16px;
     border: none;
     cursor: pointer;
     border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease;
 }
+
+button:hover {
+    background-color: #0056b3;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 table, th, td {
     border: 1px solid #ddd;
 }
+
 th, td {
     padding: 10px;
     text-align: left;
 }
+
 th {
     background-color: #007bff;
     color: white;
 }
+
 #personTableBody {
     display: block;
     max-height: 150px;
     overflow-y: auto;
 }
+
 #personTableBody tr {
     display: table;
     width: 100%;
     table-layout: fixed;
 }
+
 thead, tbody tr {
     display: table;
-    width: 100px;
+    width: 100%;
     table-layout: fixed;
+}
+
+#cancelButton {
+    background-color: #dc3545; /* Rojo */
+    margin-left: 10px;
+}
+
+#cancelButton:hover {
+    background-color: #c82333;
+}
+
+button, input[type="file"] {
+    margin-top: 20px;
+    margin-right: 10px;
 }
