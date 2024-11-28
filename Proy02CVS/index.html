@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de personas</title>
-    <link rel="stylesheet" href="app/style.css">
+    <!-- Ruta correcta al archivo CSS -->
+    <link rel="stylesheet" href="../Proy01CVS/assets/css/style.css">
+    
+    <!-- Primero cargamos el script principal que contiene la inicialización -->
+    <script type="module" src="../Proy01CVS/js/main.js"></script>
 </head>
 <body>
     <h2>Formulario de registro de personas</h2>
@@ -39,11 +43,9 @@
     <input type="file" id="csvFileInput" accept=".csv" style="display: inline;">
     <button id="loadCsvButton">Cargar desde CSV</button>
 
-    <script src="app/model.js"></script>
-    <script src="app/view.js"></script>
-    <script src="app/controller.js"></script>
-    <script>
-        Controller.init();
-    </script>
+    <!-- Cargar los scripts de Model, View y Controller -->
+    <script type="module" src="../Proy01CVS/js/models/model.js"></script>
+    <script type="module" src="../Proy01CVS/js/views/view.js"></script>
+    <script type="module" src="../Proy01CVS/js/controllers/controller.js"></script>
 </body>
 </html>
